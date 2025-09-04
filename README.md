@@ -2,7 +2,6 @@
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green.svg)](https://fastapi.tiangolo.com/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 Uma API robusta e eficiente para sumarização de textos em português, desenvolvida com FastAPI e modelos de inteligência artificial avançados.
 
@@ -357,3 +356,4 @@ Para suporte ou dúvidas:
 
 
 **Desenvolvido com ❤️ usando FastAPI e Transformers**
+
