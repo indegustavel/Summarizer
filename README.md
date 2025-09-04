@@ -353,7 +353,3 @@ Para suporte ou dúvidas:
 - ✅ Integração com modelos Hugging Face
 
 ---
-
-
-**Desenvolvido com ❤️ usando FastAPI e Transformers**
-
