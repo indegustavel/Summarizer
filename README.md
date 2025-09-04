@@ -1,248 +1,390 @@
-Roadmap: API de Sumarização de Textos com FastAPI
-Fase 0: Concepção e Planejamento
-Objetivo: Definir os requisitos e escolher as ferramentas certas.
+# API de Sumarização de Textos
 
-Definir o Escopo:
+[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green.svg)](https://fastapi.tiangolo.com/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Input: A API receberá um JSON com um campo de texto ("text": "...").
+Uma API robusta e eficiente para sumarização de textos em português, desenvolvida com FastAPI e modelos de inteligência artificial avançados.
 
-Parâmetros (Opcional): Poderia receber parâmetros como min_length ou max_length para o resumo.
+## 📋 Visão Geral
 
-Output: Retornará um JSON com o texto sumarizado ("summary": "...").
+Esta API oferece dois métodos principais de sumarização:
 
-Endpoint: Teremos um endpoint principal, por exemplo, /summarize.
+- **Sumarização Extrativa**: Seleciona as sentenças mais importantes do texto original usando algoritmos de processamento de linguagem natural
+- **Sumarização Abstrativa**: Gera novos textos concisos usando modelos de linguagem T5 treinados especificamente para tarefas de sumarização
 
-Escolher a Estratégia de Sumarização: Existem duas abordagens principais. É crucial entender a diferença para lidar com textos curtos e longos.
+A API é capaz de processar textos de qualquer tamanho, utilizando técnicas de chunking inteligente para textos longos, e oferece controle total sobre o comprimento dos resumos gerados.
 
-Sumarização Extrativa (Mais simples, ótima para começar e para textos longos):
+## ✨ Funcionalidades Principais
 
-Como funciona: Seleciona as sentenças mais importantes do texto original para formar o resumo. Não cria frases novas.
+### Métodos de Sumarização
+- **Extrativo**: Baseado em seleção de sentenças-chave usando algoritmo LSA (Latent Semantic Analysis)
+- **Abstrativo**: Geração de texto usando modelo mT5 multilingual otimizado para português
 
-Vantagens: Rápida, computacionalmente mais leve, preserva a veracidade dos fatos.
+### Controle de Parâmetros
+- `max_length`: Comprimento máximo do resumo (padrão: 150 caracteres, máximo: 1000)
+- `min_length`: Comprimento mínimo do resumo (padrão: 30 caracteres, mínimo: 10)
+- Validação automática de parâmetros com mensagens de erro detalhadas
 
-Bibliotecas Recomendadas: sumy, gensim, spacy.
+### Processamento Avançado
+- **Chunking Inteligente**: Divisão automática de textos longos em partes menores
+- **Logging Detalhado**: Monitoramento completo de todas as operações
+- **Tratamento de Erros**: Captura e logging de exceções com informações úteis
+- **Validação de Entrada**: Verificação robusta de todos os parâmetros
 
-Sumarização Abstrativa (Mais avançada, resultados mais fluidos):
+## 🚀 Instalação e Configuração
 
-Como funciona: Usa modelos de deep learning (como Transformers) para entender o texto e gerar um resumo com novas frases, como um humano faria.
+### Pré-requisitos
 
-Vantagens: Resumos mais coesos e, muitas vezes, mais curtos e diretos.
+- **Python**: 3.8 ou superior
+- **Git**: Para clonar o repositório
+- **Token do Hugging Face**: Necessário para acessar modelos (gratuito)
 
-Desafios: Requer mais poder computacional (GPU é recomendável) e os modelos geralmente têm um limite de tamanho de entrada (ex: 1024 tokens), exigindo uma estratégia de "dividir para conquistar" para textos longos.
+### Instalação por Sistema Operacional
 
-Biblioteca Recomendada: transformers (da Hugging Face).
+#### Windows
 
-Decisão Recomendada: Comece com uma abordagem extrativa para ter um produto funcional rapidamente. Depois, adicione a abstrativa como uma opção avançada.
+```bash
+# 1. Clone o repositório
+git clone https://github.com/seu-usuario/api-sumarizacao-textos.git
+cd api-sumarizacao-textos
 
-Fase 1: Configuração do Ambiente de Desenvolvimento
-Objetivo: Preparar seu ambiente de trabalho.
+# 2. Crie um ambiente virtual
+python -m venv .venv1
 
-Instalar Python: Garanta que você tenha o Python 3.8 ou superior.
+# 3. Ative o ambiente virtual
+.venv1\Scripts\activate
 
-Criar um Ambiente Virtual: Essencial para gerenciar as dependências do projeto.
+# 4. Instale as dependências
+pip install -r requirements.txt
 
-Bash
+# 5. Configure o token do Hugging Face
+# Crie um arquivo chamado API_HuggingFace no diretório raiz
+# Cole seu token do Hugging Face (obtenha em: https://huggingface.co/settings/tokens)
+echo "hf_seu_token_aqui" > API_HuggingFace
+```
 
-python -m venv venv
-source venv/bin/activate  # No Windows: venv\Scripts\activate
-Instalar as Bibliotecas Principais:
+#### Linux/macOS
 
-Bash
+```bash
+# 1. Clone o repositório
+git clone https://github.com/seu-usuario/api-sumarizacao-textos.git
+cd api-sumarizacao-textos
 
-pip install fastapi "uvicorn[standard]"
-Instalar Bibliotecas de NLP:
+# 2. Crie um ambiente virtual
+python3 -m venv .venv1
 
-Para a abordagem Extrativa (com sumy):
+# 3. Ative o ambiente virtual
+source .venv1/bin/activate
 
-Bash
+# 4. Instale as dependências
+pip install -r requirements.txt
 
-pip install sumy nltk spacy
-python -m spacy download pt_core_news_sm # Modelo de português para o spaCy
-Para a abordagem Abstrativa (com transformers):
+# 5. Configure o token do Hugging Face
+echo "hf_seu_token_aqui" > API_HuggingFace
+```
 
-Bash
+### Dependências Principais
 
-pip install transformers torch sentencepiece
-# Se tiver uma GPU NVIDIA, instale o PyTorch com suporte a CUDA
-Fase 2: Lógica de Sumarização (O Cérebro do Projeto)
-Objetivo: Criar a função que efetivamente resume o texto. Crie um arquivo summarizer.py.
+```txt
+fastapi>=0.100.0
+uvicorn>=0.20.0
+pydantic>=2.0.0
+transformers>=4.20.0
+torch>=2.0.0
+sumy>=0.11.0
+nltk>=3.8.0
+protobuf>=4.21.0
+huggingface-hub>=0.15.0
+```
 
-Opção A: Lógica Extrativa com sumy:
+### Executando Localmente
 
-Python
+```bash
+# Ative o ambiente virtual
+.venv1\Scripts\activate  # Windows
+# ou
+source .venv1/bin/activate  # Linux/macOS
 
-# summarizer.py
-from sumy.parsers.plaintext import PlaintextParser
-from sumy.nlp.tokenizers import Tokenizer
-from sumy.summarizers.lsa import LsaSummarizer as Summarizer
-from sumy.nlp.stemmers import Stemmer
-from sumy.utils import get_stop_words
+# Execute a API
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
 
-LANGUAGE = "portuguese"
-SENTENCES_COUNT = 3 # Define quantas sentenças você quer no resumo
+A API estará disponível em:
+- **Documentação Interativa**: http://127.0.0.1:8000/docs
+- **Documentação Alternativa**: http://127.0.0.1:8000/redoc
+- **Endpoint Raiz**: http://127.0.0.1:8000/
+- **Verificação de Saúde**: http://127.0.0.1:8000/health
 
-def summarize_extractive(text):
-    parser = PlaintextParser.from_string(text, Tokenizer(LANGUAGE))
-    stemmer = Stemmer(LANGUAGE)
-    summarizer = Summarizer(stemmer)
-    summarizer.stop_words = get_stop_words(LANGUAGE)
+## 📖 Exemplos de Uso
 
-    summary_sentences = []
-    for sentence in summarizer(parser.document, SENTENCES_COUNT):
-        summary_sentences.append(str(sentence))
+### Verificar Status da API
 
-    return " ".join(summary_sentences)
-Opção B: Lógica Abstrativa com transformers:
+```bash
+curl http://127.0.0.1:8000/
+```
 
-Python
+**Resposta:**
+```json
+{
+  "message": "Bem-vindo à API de Sumarização de Textos!",
+  "docs": "/docs",
+  "methods": ["extractive", "abstractive"],
+  "version": "2.0.0"
+}
+```
 
-# Adicione isso ao summarizer.py
-from transformers import pipeline
+### Verificar Saúde do Sistema
 
-# Use um modelo pré-treinado em português
-# Carregar o modelo pode demorar um pouco na primeira vez
-summarizer_abstractive_pipeline = pipeline(
-    "summarization", 
-    model="unicamp-dl/ptt5-base-portuguese-summ"
-)
+```bash
+curl http://127.0.0.1:8000/health
+```
 
-def summarize_abstractive(text):
-    # O modelo tem um limite de entrada, então truncamos para segurança
-    # Para textos longos, a estratégia é dividir o texto em partes (chunks)
-    summary = summarizer_abstractive_pipeline(
-        text, 
-        max_length=150, 
-        min_length=30, 
-        do_sample=False
-    )
-    return summary[0]['summary_text']
-Fase 3: Construção da API com FastAPI
-Objetivo: Expor a lógica de sumarização através de um endpoint HTTP.
+**Resposta:**
+```json
+{
+  "status": "healthy",
+  "timestamp": "2025-09-04T20:44:11.628Z",
+  "version": "2.0.0",
+  "model": "csebuetnlp/mT5_multilingual_XLSum"
+}
+```
 
-Criar o arquivo principal main.py:
+### Sumarização Extrativa
 
-Definir os Modelos de Dados com Pydantic: Isso garante a validação automática dos dados de entrada e saída.
+```bash
+curl -X POST "http://127.0.0.1:8000/summarize" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "text": "A inteligência artificial está revolucionando diversos setores da sociedade. Desde o diagnóstico médico até a análise financeira, os algoritmos de IA demonstram capacidades impressionantes. No entanto, é fundamental garantir que seu desenvolvimento seja ético e responsável.",
+    "method": "extractive",
+    "max_length": 200,
+    "min_length": 50
+  }'
+```
 
-Criar o Endpoint:
+### Sumarização Abstrativa
 
-Python
+```bash
+curl -X POST "http://127.0.0.1:8000/summarize" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "text": "A inteligência artificial está revolucionando diversos setores da sociedade. Desde o diagnóstico médico até a análise financeira, os algoritmos de IA demonstram capacidades impressionantes. No entanto, é fundamental garantir que seu desenvolvimento seja ético e responsável.",
+    "method": "abstractive",
+    "max_length": 150,
+    "min_length": 30
+  }'
+```
 
-# main.py
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+### Exemplo com Python
 
-# Importe as funções que você criou
-from summarizer import summarize_extractive, summarize_abstractive
+```python
+import requests
 
-app = FastAPI(
-    title="API de Sumarização de Textos",
-    description="Uma API para sumarização de textos usando abordagens extrativa e abstrativa.",
-    version="1.0.0"
-)
+# Configuração da requisição
+url = "http://127.0.0.1:8000/summarize"
+payload = {
+    "text": "Texto longo que você deseja resumir...",
+    "method": "abstractive",
+    "max_length": 200,
+    "min_length": 50
+}
 
-# Modelo de entrada
+# Fazendo a requisição
+response = requests.post(url, json=payload)
+result = response.json()
+
+print("Resumo:", result["summary"])
+```
+
+## 📚 Documentação da API
+
+### Modelos de Dados
+
+#### TextInput
+Modelo para entrada de dados de sumarização.
+
+```python
 class TextInput(BaseModel):
-    text: str
-    method: str = "extractive" # 'extractive' ou 'abstractive'
+    text: str                           # Texto a ser sumarizado (obrigatório)
+    method: str = "extractive"          # Método: 'extractive' ou 'abstractive'
+    max_length: int = 150              # Comprimento máximo em caracteres
+    min_length: int = 30               # Comprimento mínimo em caracteres
+```
 
-# Modelo de saída
+**Exemplo:**
+```json
+{
+  "text": "A inteligência artificial está transformando o mundo...",
+  "method": "abstractive",
+  "max_length": 200,
+  "min_length": 50
+}
+```
+
+#### SummaryOutput
+Modelo para saída de dados de sumarização.
+
+```python
 class SummaryOutput(BaseModel):
-    summary: str
+    summary: str  # Texto resumido gerado
+```
 
-@app.post("/summarize", response_model=SummaryOutput)
-async def get_summary(payload: TextInput):
-    """
-    Recebe um texto e retorna seu resumo.
-    - **text**: O texto a ser sumarizado.
-    - **method**: 'extractive' (padrão) ou 'abstractive'.
-    """
-    if not payload.text or not payload.text.strip():
-        raise HTTPException(status_code=400, detail="O campo de texto não pode ser vazio.")
+**Exemplo:**
+```json
+{
+  "summary": "A IA está revolucionando diversos setores, desde medicina até finanças, mas seu desenvolvimento deve ser ético."
+}
+```
 
-    if payload.method == "extractive":
-        summary = summarize_extractive(payload.text)
-    elif payload.method == "abstractive":
-        # Lidar com textos longos para o modelo abstrativo
-        if len(payload.text.split()) > 500: # Limite de exemplo
-             raise HTTPException(
-                status_code=400, 
-                detail="Para o método abstrativo, o texto é muito longo. Use o método extrativo ou envie um texto menor."
-            )
-        summary = summarize_abstractive(payload.text)
-    else:
-        raise HTTPException(status_code=400, detail="Método inválido. Use 'extractive' ou 'abstractive'.")
+### Endpoints
 
-    return SummaryOutput(summary=summary)
+#### GET /
+Retorna informações básicas sobre a API.
 
-@app.get("/")
-async def root():
-    return {"message": "Bem-vindo à API de Sumarização! Acesse /docs para a documentação."}
-Rodar o Servidor:
+- **URL**: `/`
+- **Método**: GET
+- **Resposta**: Informações da API
 
-Bash
+#### GET /health
+Verifica o status de saúde da API.
 
-uvicorn main:app --reload
-Agora você pode acessar http://127.0.0.1:8000 no seu navegador e a documentação interativa em http://127.0.0.1:8000/docs.
+- **URL**: `/health`
+- **Método**: GET
+- **Resposta**: Status do sistema
 
-Fase 4: Refinamento e Boas Práticas
-Objetivo: Tornar a API mais robusta e pronta para produção.
+#### POST /summarize
+Realiza a sumarização do texto fornecido.
 
-Processamento Assíncrono: A sumarização pode ser lenta. Para não bloquear o servidor, execute as funções de NLP (que são síncronas) em um thread pool.
+- **URL**: `/summarize`
+- **Método**: POST
+- **Corpo**: Objeto TextInput
+- **Resposta**: Objeto SummaryOutput
 
-Python
+**Códigos de Status:**
+- `200`: Sucesso
+- `400`: Erro de validação (parâmetros inválidos)
+- `500`: Erro interno do servidor
 
-# Em main.py, modifique o endpoint:
-from fastapi.concurrency import run_in_threadpool
+## 🔧 Detalhes Técnicos
 
-@app.post("/summarize", response_model=SummaryOutput)
-async def get_summary(payload: TextInput):
-    # ... (validações) ...
-    if payload.method == "extractive":
-        summary = await run_in_threadpool(summarize_extractive, payload.text)
-    else:
-        summary = await run_in_threadpool(summarize_abstractive, payload.text)
-    # ...
-    return SummaryOutput(summary=summary)
-Gerenciamento de Configuração: Use variáveis de ambiente para configurações, como o nome do modelo do Hugging Face (ex: com pydantic-settings).
+### Método Extrativo
 
-Tratamento de Textos Longos (Abstrativo): Implemente uma estratégia de chunking. Divida o texto em pedaços que o modelo aceite, sumarize cada pedaço e depois junte os resumos (ou faça um resumo dos resumos).
+1. **Pré-processamento**: Tokenização e análise linguística usando NLTK
+2. **Análise de Sentenças**: Extração de features das sentenças (comprimento, posição, palavras-chave)
+3. **Pontuação LSA**: Aplicação do algoritmo Latent Semantic Analysis para identificar sentenças mais relevantes
+4. **Seleção**: Escolha das N sentenças com maior pontuação
+5. **Pós-processamento**: Ajuste do comprimento baseado nos parâmetros `max_length` e `min_length`
 
-Testes: Escreva testes para seus endpoints usando pytest e httpx para garantir que a API funcione como esperado.
+**Vantagens:**
+- Preserva o texto original
+- Mais rápido e eficiente
+- Menos propenso a erros factuais
 
-Fase 5: Deploy e Produção
-Objetivo: Disponibilizar sua API na internet.
+### Método Abstrativo
 
-Containerização com Docker: Crie um Dockerfile para empacotar sua aplicação e suas dependências. Isso garante consistência entre os ambientes.
+1. **Pré-processamento**: Adição do prefixo "summarize: " para orientar o modelo T5
+2. **Tokenização**: Conversão do texto em tokens usando o tokenizer do mT5
+3. **Chunking (se necessário)**: Divisão em partes menores se o texto exceder 512 tokens
+4. **Geração**: Uso do pipeline de sumarização com parâmetros otimizados:
+   - `temperature=0.3`: Controle de aleatoriedade
+   - `top_p=0.9`: Nucleus sampling
+   - `top_k=50`: Limitação de candidatos
+   - `num_beams=4`: Busca por feixe para qualidade
+   - `repetition_penalty=1.2`: Penalização de repetições
+5. **Pós-processamento**: Validação do comprimento e ajuste se necessário
 
-Dockerfile
+**Parâmetros Avançados:**
+- **Beam Search**: Explora múltiplas possibilidades de geração para encontrar o melhor resumo
+- **Repetition Penalty**: Evita frases repetidas no resumo
+- **Length Control**: Garante que o resumo respeite os limites especificados
 
-# Dockerfile
-FROM python:3.10-slim
+### Validações e Logging
 
-WORKDIR /app
+**Validações Implementadas:**
+- Verificação de texto vazio
+- Validação de `max_length > min_length`
+- Limites de `max_length` (máximo 1000)
+- Limites de `min_length` (mínimo 10)
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-RUN python -m spacy download pt_core_news_sm
+**Sistema de Logging:**
+- Logs estruturados com timestamps
+- Níveis: INFO, WARNING, ERROR
+- Informações sobre processamento de chunks
+- Valores de parâmetros utilizados
+- Tempos de processamento
+- Detalhes de erros ocorridos
 
-# Pré-download do modelo Hugging Face para dentro da imagem
-RUN python -c "from transformers import pipeline; pipeline('summarization', model='unicamp-dl/ptt5-base-portuguese-summ')"
+### Processamento de Textos Longos
 
+Para textos que excedem o limite do modelo (512 tokens):
 
-COPY . .
+1. **Divisão Inteligente**: Prioriza quebras por sentenças para manter coerência
+2. **Fallback por Tokens**: Se a divisão por sentenças falhar, divide por tokens
+3. **Distribuição de Comprimento**: Aloca o `max_length` entre os chunks
+4. **Combinação**: Junta os resumos parciais
+5. **Resumo Final**: Se necessário, gera um resumo do resumo combinado
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
-Não se esqueça de criar um arquivo requirements.txt (pip freeze > requirements.txt).
+## 💻 Requisitos de Sistema
 
-Servidor de Produção: Use um servidor ASGI robusto como o Gunicorn para gerenciar o Uvicorn.
-gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app
+### Hardware Mínimo
+- **CPU**: 2 GHz dual-core
+- **RAM**: 4 GB
+- **Armazenamento**: 2 GB (para modelos e dados)
 
-Escolha da Plataforma de Nuvem:
+### Hardware Recomendado
+- **CPU**: 3 GHz quad-core ou superior
+- **RAM**: 8 GB ou mais
+- **GPU**: NVIDIA com 4GB+ VRAM (opcional, acelera processamento)
+- **Armazenamento**: SSD com 5 GB disponível
 
-Google Cloud Run: Excelente opção serverless, paga pelo uso e escala automaticamente. Ideal para este tipo de projeto.
+### Software
+- **Sistema Operacional**: Windows 10+, Ubuntu 18.04+, macOS 10.15+
+- **Python**: 3.8 - 3.11
+- **Git**: Para versionamento
 
-AWS (ECS ou App Runner): Opções robustas para deploy de contêineres.
+## 🤝 Contribuição
 
-Heroku: Simples de começar, mas pode se tornar caro.
+Contribuições são bem-vindas! Para contribuir:
 
-DigitalOcean App Platform: Alternativa amigável para desenvolvedores.
+1. Fork o projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
+
+### Diretrizes de Contribuição
+- Siga o estilo de código PEP 8
+- Adicione testes para novas funcionalidades
+- Atualize a documentação conforme necessário
+- Mantenha compatibilidade com versões anteriores
+
+## 📄 Licença
+
+Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
+
+## 📞 Suporte
+
+Para suporte ou dúvidas:
+- Abra uma issue no GitHub
+- Consulte a documentação em `/docs`
+- Verifique os logs da aplicação para diagnóstico
+
+## 🔄 Changelog
+
+### Versão 2.0.0
+- ✨ Reformulação completa do método abstrativo
+- 🚀 Adição de controle de parâmetros `max_length` e `min_length`
+- 📊 Implementação de logging detalhado
+- 🔧 Chunking inteligente para textos longos
+- 🛡️ Validação robusta de entrada
+- 📚 Documentação aprimorada
+
+### Versão 1.0.0
+- ✅ Implementação básica com métodos extrativo e abstrativo
+- ✅ API funcional com FastAPI
+- ✅ Integração com modelos Hugging Face
+
+---
+
+**Desenvolvido com ❤️ usando FastAPI e Transformers**
