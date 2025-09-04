@@ -325,43 +325,11 @@ Para textos que excedem o limite do modelo (512 tokens):
 4. **Combinação**: Junta os resumos parciais
 5. **Resumo Final**: Se necessário, gera um resumo do resumo combinado
 
-## 💻 Requisitos de Sistema
-
-### Hardware Mínimo
-- **CPU**: 2 GHz dual-core
-- **RAM**: 4 GB
-- **Armazenamento**: 2 GB (para modelos e dados)
-
-### Hardware Recomendado
-- **CPU**: 3 GHz quad-core ou superior
-- **RAM**: 8 GB ou mais
-- **GPU**: NVIDIA com 4GB+ VRAM (opcional, acelera processamento)
-- **Armazenamento**: SSD com 5 GB disponível
-
-### Software
-- **Sistema Operacional**: Windows 10+, Ubuntu 18.04+, macOS 10.15+
-- **Python**: 3.8 - 3.11
-- **Git**: Para versionamento
-
-## 🤝 Contribuição
-
-Contribuições são bem-vindas! Para contribuir:
-
-1. Fork o projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
-
 ### Diretrizes de Contribuição
 - Siga o estilo de código PEP 8
 - Adicione testes para novas funcionalidades
 - Atualize a documentação conforme necessário
 - Mantenha compatibilidade com versões anteriores
-
-## 📄 Licença
-
-Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
 
 ## 📞 Suporte
 
@@ -386,5 +354,6 @@ Para suporte ou dúvidas:
 - ✅ Integração com modelos Hugging Face
 
 ---
+
 
 **Desenvolvido com ❤️ usando FastAPI e Transformers**
