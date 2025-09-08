@@ -1,16 +1,17 @@
-# API de Sumarização de Textos
+# 🚀 API de Sumarização de Textos
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green.svg)](https://fastapi.tiangolo.com/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
 
-Uma API robusta e eficiente para sumarização de textos em português, desenvolvida com FastAPI e modelos de inteligência artificial avançados.
+Uma API robusta, segura e de alta performance para sumarização de textos em português, desenvolvida com FastAPI e modelos de inteligência artificial avançados.
 
 ## 📋 Visão Geral
 
-Esta API oferece dois métodos principais de sumarização:
+Esta API oferece três métodos principais de sumarização:
 
 - **Sumarização Extrativa**: Seleciona as sentenças mais importantes do texto original usando algoritmos de processamento de linguagem natural
 - **Sumarização Abstrativa**: Gera novos textos concisos usando modelos de linguagem T5 treinados especificamente para tarefas de sumarização
+- **Sumarização Automática**: Seleciona inteligentemente o melhor método baseado na análise do texto
 
 A API é capaz de processar textos de qualquer tamanho, utilizando técnicas de chunking inteligente para textos longos, e oferece controle total sobre o comprimento dos resumos gerados.
 
@@ -19,169 +20,187 @@ A API é capaz de processar textos de qualquer tamanho, utilizando técnicas de 
 ### Métodos de Sumarização
 - **Extrativo**: Baseado em seleção de sentenças-chave usando algoritmo LSA (Latent Semantic Analysis)
 - **Abstrativo**: Geração de texto usando modelo mT5 multilingual otimizado para português
+- **Automático**: Seleção inteligente do método baseado na análise do texto
+
+### 🆕 Funcionalidades Avançadas
+- **Cache Inteligente**: Sistema de cache em memória com TTL configurável
+- **Processamento Paralelo**: Chunks processados simultaneamente para textos longos
+- **Lazy Loading**: Modelos carregados apenas quando necessário
+- **Validação de Segurança**: Proteção contra XSS, validação de entrada robusta
+- **Timeouts Configuráveis**: Controle de tempo limite para operações
+- **Monitoramento**: Endpoints de saúde, estatísticas de cache e performance
 
 ### Controle de Parâmetros
 - `max_length`: Comprimento máximo do resumo (padrão: 150 caracteres, máximo: 1000)
 - `min_length`: Comprimento mínimo do resumo (padrão: 30 caracteres, mínimo: 10)
+- `max_text_length`: Limite de segurança para texto de entrada (padrão: 50.000 caracteres)
 - Validação automática de parâmetros com mensagens de erro detalhadas
-
-### Processamento Avançado
-- **Chunking Inteligente**: Divisão automática de textos longos em partes menores
-- **Logging Detalhado**: Monitoramento completo de todas as operações
-- **Tratamento de Erros**: Captura e logging de exceções com informações úteis
-- **Validação de Entrada**: Verificação robusta de todos os parâmetros
 
 ## 🚀 Instalação e Configuração
 
 ### Pré-requisitos
 
 - **Python**: 3.8 ou superior
-- **Git**: Para clonar o repositório
+- **Git**: Para clonar o repositório (opcional)
 - **Token do Hugging Face**: Necessário para acessar modelos (gratuito)
 
-### Instalação por Sistema Operacional
+### Passo 1: Preparar o Ambiente
 
 #### Windows
-
 ```bash
-# 1. Clone o repositório
-git clone https://github.com/seu-usuario/api-sumarizacao-textos.git
-cd api-sumarizacao-textos
+# 1. Navegue até a pasta do projeto
+cd "C:\Users\Gustavo\Desktop\Sumarização"
 
-# 2. Crie um ambiente virtual
+# 2. Crie um ambiente virtual (se não existir)
 python -m venv .venv1
 
 # 3. Ative o ambiente virtual
 .venv1\Scripts\activate
-
-# 4. Instale as dependências
-pip install -r requirements.txt
-
-# 5. Configure o token do Hugging Face
-# Crie um arquivo chamado API_HuggingFace no diretório raiz
-# Cole seu token do Hugging Face (obtenha em: https://huggingface.co/settings/tokens)
-echo "hf_seu_token_aqui" > API_HuggingFace
 ```
 
 #### Linux/macOS
-
 ```bash
-# 1. Clone o repositório
-git clone https://github.com/seu-usuario/api-sumarizacao-textos.git
-cd api-sumarizacao-textos
+# 1. Navegue até a pasta do projeto
+cd /caminho/para/seu/projeto
 
-# 2. Crie um ambiente virtual
+# 2. Crie um ambiente virtual (se não existir)
 python3 -m venv .venv1
 
 # 3. Ative o ambiente virtual
 source .venv1/bin/activate
-
-# 4. Instale as dependências
-pip install -r requirements.txt
-
-# 5. Configure o token do Hugging Face
-echo "hf_seu_token_aqui" > API_HuggingFace
 ```
 
-### Dependências Principais
-
-```txt
-fastapi>=0.100.0
-uvicorn>=0.20.0
-pydantic>=2.0.0
-transformers>=4.20.0
-torch>=2.0.0
-sumy>=0.11.0
-nltk>=3.8.0
-protobuf>=4.21.0
-huggingface-hub>=0.15.0
-```
-
-### Executando Localmente
+### Passo 2: Instalar Dependências
 
 ```bash
-# Ative o ambiente virtual
-.venv1\Scripts\activate  # Windows
-# ou
-source .venv1/bin/activate  # Linux/macOS
+# Instalar todas as dependências necessárias
+pip install -r requirements.txt
+```
 
-# Execute a API
+### Passo 3: Configurar Token do Hugging Face
+
+1. **Obter Token**:
+   - Acesse: https://huggingface.co/settings/tokens
+   - Crie uma conta gratuita se necessário
+   - Gere um novo token
+
+2. **Configurar Token** (Opcional):
+   - O token já está configurado no código para desenvolvimento
+   - Para produção, configure a variável de ambiente `HUGGINGFACE_TOKEN`
+
+### Passo 4: Iniciar a API
+
+```bash
+# Iniciar o servidor
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-A API estará disponível em:
-- **Documentação Interativa**: http://127.0.0.1:8000/docs
-- **Documentação Alternativa**: http://127.0.0.1:8000/redoc
-- **Endpoint Raiz**: http://127.0.0.1:8000/
-- **Verificação de Saúde**: http://127.0.0.1:8000/health
+## 🌐 Como Usar a API
 
-## 📖 Exemplos de Uso
+### Acessar a Documentação
 
-### Verificar Status da API
+Após iniciar a API, acesse no seu navegador:
 
-```bash
-curl http://127.0.0.1:8000/
-```
+- **Documentação Interativa**: http://localhost:8000/docs
+- **Documentação Alternativa**: http://localhost:8000/redoc
+- **Página Inicial**: http://localhost:8000/
 
-**Resposta:**
+### Endpoints Disponíveis
+
+#### 1. **POST /summarize** - Sumarização de Texto
+Endpoint principal para sumarizar textos.
+
+**Exemplo de Requisição:**
 ```json
 {
-  "message": "Bem-vindo à API de Sumarização de Textos!",
-  "docs": "/docs",
-  "methods": ["extractive", "abstractive"],
-  "version": "2.0.0"
+  "text": "Este é um texto de exemplo para testar a sumarização. A API pode processar textos longos e gerar resumos concisos usando diferentes métodos de inteligência artificial.",
+  "method": "auto",
+  "max_length": 100,
+  "min_length": 30
 }
 ```
 
-### Verificar Saúde do Sistema
-
-```bash
-curl http://127.0.0.1:8000/health
+**Exemplo de Resposta:**
+```json
+{
+  "summary": "A API processa textos usando IA para gerar resumos concisos.",
+  "method_used": "abstractive",
+  "processing_time": 2.34,
+  "cached": false,
+  "quality_score": 0.85
+}
 ```
+
+#### 2. **GET /health** - Verificação de Saúde
+Verifica o status da API e componentes.
 
 **Resposta:**
 ```json
 {
   "status": "healthy",
-  "timestamp": "2025-09-04T20:44:11.628Z",
-  "version": "2.0.0",
-  "model": "csebuetnlp/mT5_multilingual_XLSum"
+  "timestamp": "2025-09-05T18:04:33.283Z",
+  "version": "3.0.0",
+  "model": {
+    "name": "csebuetnlp/mT5_multilingual_XLSum",
+    "status": "loaded"
+  },
+  "cache": {
+    "size": 5,
+    "max_size": 50,
+    "ttl": 3600
+  }
 }
 ```
 
-### Sumarização Extrativa
+#### 3. **GET /cache/stats** - Estatísticas do Cache
+Retorna informações sobre o cache.
+
+#### 4. **DELETE /cache/clear** - Limpar Cache
+Remove todas as entradas do cache.
+
+#### 5. **GET /model/info** - Informações do Modelo
+Retorna detalhes sobre o modelo carregado.
+
+### Métodos de Sumarização
+
+#### **Extrativo** (`method: "extractive"`)
+- Seleciona as sentenças mais importantes do texto original
+- Mais rápido e preserva o texto original
+- Ideal para textos estruturados
+
+#### **Abstrativo** (`method: "abstractive"`)
+- Gera novo texto usando IA
+- Mais flexível e conciso
+- Ideal para textos narrativos
+
+#### **Automático** (`method: "auto"`)
+- Seleciona automaticamente o melhor método
+- Baseado na análise do texto (tamanho, complexidade)
+- Recomendado para uso geral
+
+## 💻 Exemplos de Uso
+
+### 1. Usando cURL
 
 ```bash
-curl -X POST "http://127.0.0.1:8000/summarize" \
+# Sumarização automática
+curl -X POST "http://localhost:8000/summarize" \
   -H "Content-Type: application/json" \
   -d '{
     "text": "A inteligência artificial está revolucionando diversos setores da sociedade. Desde o diagnóstico médico até a análise financeira, os algoritmos de IA demonstram capacidades impressionantes. No entanto, é fundamental garantir que seu desenvolvimento seja ético e responsável.",
-    "method": "extractive",
-    "max_length": 200,
+    "method": "auto",
+    "max_length": 150,
     "min_length": 50
   }'
 ```
 
-### Sumarização Abstrativa
-
-```bash
-curl -X POST "http://127.0.0.1:8000/summarize" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "text": "A inteligência artificial está revolucionando diversos setores da sociedade. Desde o diagnóstico médico até a análise financeira, os algoritmos de IA demonstram capacidades impressionantes. No entanto, é fundamental garantir que seu desenvolvimento seja ético e responsável.",
-    "method": "abstractive",
-    "max_length": 150,
-    "min_length": 30
-  }'
-```
-
-### Exemplo com Python
+### 2. Usando Python
 
 ```python
 import requests
 
 # Configuração da requisição
-url = "http://127.0.0.1:8000/summarize"
+url = "http://localhost:8000/summarize"
 payload = {
     "text": "Texto longo que você deseja resumir...",
     "method": "abstractive",
@@ -194,162 +213,134 @@ response = requests.post(url, json=payload)
 result = response.json()
 
 print("Resumo:", result["summary"])
+print("Método usado:", result["method_used"])
+print("Tempo de processamento:", result["processing_time"], "s")
 ```
 
-## 📚 Documentação da API
+### 3. Usando JavaScript (Fetch)
 
-### Modelos de Dados
+```javascript
+const response = await fetch('http://localhost:8000/summarize', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    text: 'Seu texto aqui...',
+    method: 'auto',
+    max_length: 150,
+    min_length: 30
+  })
+});
 
-#### TextInput
-Modelo para entrada de dados de sumarização.
+const result = await response.json();
+console.log('Resumo:', result.summary);
+```
+
+## 📊 Monitoramento e Estatísticas
+
+### Verificar Status da API
+```bash
+curl http://localhost:8000/health
+```
+
+### Ver Estatísticas do Cache
+```bash
+curl http://localhost:8000/cache/stats
+```
+
+### Limpar Cache
+```bash
+curl -X DELETE http://localhost:8000/cache/clear
+```
+
+## 🔧 Configurações Avançadas
+
+### Parâmetros de Configuração
+
+Você pode modificar as configurações editando o arquivo `config.py`:
 
 ```python
-class TextInput(BaseModel):
-    text: str                           # Texto a ser sumarizado (obrigatório)
-    method: str = "extractive"          # Método: 'extractive' ou 'abstractive'
-    max_length: int = 150              # Comprimento máximo em caracteres
-    min_length: int = 30               # Comprimento mínimo em caracteres
+# Configurações de Sumarização
+DEFAULT_MAX_LENGTH = 150        # Comprimento padrão do resumo
+DEFAULT_MIN_LENGTH = 30         # Comprimento mínimo
+MAX_TEXT_LENGTH = 50000         # Limite de texto de entrada
+
+# Configurações de Performance
+REQUEST_TIMEOUT = 300           # Timeout em segundos
+CACHE_TTL = 3600               # TTL do cache em segundos
+
+# Configurações do Modelo
+MODEL_NAME = "csebuetnlp/mT5_multilingual_XLSum"
+MAX_INPUT_LENGTH = 512         # Limite de tokens do modelo
 ```
 
-**Exemplo:**
-```json
-{
-  "text": "A inteligência artificial está transformando o mundo...",
-  "method": "abstractive",
-  "max_length": 200,
-  "min_length": 50
-}
+### Variáveis de Ambiente
+
+Para produção, configure as seguintes variáveis:
+
+```bash
+# Token do Hugging Face
+export HUGGINGFACE_TOKEN=seu_token_aqui
+
+# Configurações da API
+export API_HOST=0.0.0.0
+export API_PORT=8000
+export LOG_LEVEL=INFO
 ```
 
-#### SummaryOutput
-Modelo para saída de dados de sumarização.
+## 🚨 Solução de Problemas
 
-```python
-class SummaryOutput(BaseModel):
-    summary: str  # Texto resumido gerado
+### Problema: "Token do Hugging Face não encontrado"
+**Solução**: O token já está configurado no código. Se necessário, configure a variável de ambiente `HUGGINGFACE_TOKEN`.
+
+### Problema: "Erro de importação"
+**Solução**: Verifique se todas as dependências foram instaladas:
+```bash
+pip install -r requirements.txt
 ```
 
-**Exemplo:**
-```json
-{
-  "summary": "A IA está revolucionando diversos setores, desde medicina até finanças, mas seu desenvolvimento deve ser ético."
-}
+### Problema: "Porta já em uso"
+**Solução**: Use uma porta diferente:
+```bash
+uvicorn main:app --reload --host 0.0.0.0 --port 8001
 ```
 
-### Endpoints
+### Problema: "Modelo não carrega"
+**Solução**: 
+1. Verifique sua conexão com a internet
+2. Confirme se o token do Hugging Face é válido
+3. Aguarde o carregamento inicial (pode demorar alguns minutos)
 
-#### GET /
-Retorna informações básicas sobre a API.
+## 📁 Estrutura do Projeto
 
-- **URL**: `/`
-- **Método**: GET
-- **Resposta**: Informações da API
-
-#### GET /health
-Verifica o status de saúde da API.
-
-- **URL**: `/health`
-- **Método**: GET
-- **Resposta**: Status do sistema
-
-#### POST /summarize
-Realiza a sumarização do texto fornecido.
-
-- **URL**: `/summarize`
-- **Método**: POST
-- **Corpo**: Objeto TextInput
-- **Resposta**: Objeto SummaryOutput
-
-**Códigos de Status:**
-- `200`: Sucesso
-- `400`: Erro de validação (parâmetros inválidos)
-- `500`: Erro interno do servidor
-
-## 🔧 Detalhes Técnicos
-
-### Método Extrativo
-
-1. **Pré-processamento**: Tokenização e análise linguística usando NLTK
-2. **Análise de Sentenças**: Extração de features das sentenças (comprimento, posição, palavras-chave)
-3. **Pontuação LSA**: Aplicação do algoritmo Latent Semantic Analysis para identificar sentenças mais relevantes
-4. **Seleção**: Escolha das N sentenças com maior pontuação
-5. **Pós-processamento**: Ajuste do comprimento baseado nos parâmetros `max_length` e `min_length`
-
-**Vantagens:**
-- Preserva o texto original
-- Mais rápido e eficiente
-- Menos propenso a erros factuais
-
-### Método Abstrativo
-
-1. **Pré-processamento**: Adição do prefixo "summarize: " para orientar o modelo T5
-2. **Tokenização**: Conversão do texto em tokens usando o tokenizer do mT5
-3. **Chunking (se necessário)**: Divisão em partes menores se o texto exceder 512 tokens
-4. **Geração**: Uso do pipeline de sumarização com parâmetros otimizados:
-   - `temperature=0.3`: Controle de aleatoriedade
-   - `top_p=0.9`: Nucleus sampling
-   - `top_k=50`: Limitação de candidatos
-   - `num_beams=4`: Busca por feixe para qualidade
-   - `repetition_penalty=1.2`: Penalização de repetições
-5. **Pós-processamento**: Validação do comprimento e ajuste se necessário
-
-**Parâmetros Avançados:**
-- **Beam Search**: Explora múltiplas possibilidades de geração para encontrar o melhor resumo
-- **Repetition Penalty**: Evita frases repetidas no resumo
-- **Length Control**: Garante que o resumo respeite os limites especificados
-
-### Validações e Logging
-
-**Validações Implementadas:**
-- Verificação de texto vazio
-- Validação de `max_length > min_length`
-- Limites de `max_length` (máximo 1000)
-- Limites de `min_length` (mínimo 10)
-
-**Sistema de Logging:**
-- Logs estruturados com timestamps
-- Níveis: INFO, WARNING, ERROR
-- Informações sobre processamento de chunks
-- Valores de parâmetros utilizados
-- Tempos de processamento
-- Detalhes de erros ocorridos
-
-### Processamento de Textos Longos
-
-Para textos que excedem o limite do modelo (512 tokens):
-
-1. **Divisão Inteligente**: Prioriza quebras por sentenças para manter coerência
-2. **Fallback por Tokens**: Se a divisão por sentenças falhar, divide por tokens
-3. **Distribuição de Comprimento**: Aloca o `max_length` entre os chunks
-4. **Combinação**: Junta os resumos parciais
-5. **Resumo Final**: Se necessário, gera um resumo do resumo combinado
-
-### Diretrizes de Contribuição
-- Siga o estilo de código PEP 8
-- Adicione testes para novas funcionalidades
-- Atualize a documentação conforme necessário
-- Mantenha compatibilidade com versões anteriores
-
-## 📞 Suporte
-
-Para suporte ou dúvidas:
-- Abra uma issue no GitHub
-- Consulte a documentação em `/docs`
-- Verifique os logs da aplicação para diagnóstico
+```
+Sumarização/
+├── main.py              # Aplicação principal FastAPI
+├── summarizer.py        # Lógica de sumarização
+├── config.py           # Configurações da aplicação
+├── security.py         # Validação e segurança
+├── cache.py            # Sistema de cache
+├── models.py           # Gerenciamento de modelos
+├── requirements.txt    # Dependências Python
+└── README.md          # Este arquivo
+```
 
 ## 🔄 Changelog
 
-### Versão 2.0.0
-- ✨ Reformulação completa do método abstrativo
-- 🚀 Adição de controle de parâmetros `max_length` e `min_length`
-- 📊 Implementação de logging detalhado
-- 🔧 Chunking inteligente para textos longos
-- 🛡️ Validação robusta de entrada
-- 📚 Documentação aprimorada
-
-### Versão 1.0.0
-- ✅ Implementação básica com métodos extrativo e abstrativo
-- ✅ API funcional com FastAPI
-- ✅ Integração com modelos Hugging Face
+### Versão 3.0.0 (Atual)
+- 🔒 **Segurança**: Validação avançada, sanitização de entrada, proteção XSS
+- ⚡ **Performance**: Cache inteligente, lazy loading, processamento paralelo
+- 🏗️ **Arquitetura**: Separação de responsabilidades, configuração externa
+- 🛡️ **Robustez**: Timeouts configuráveis, retry logic, tratamento de erros
+- 📊 **Monitoramento**: Endpoints de saúde, estatísticas, métricas
 
 ---
+
+## 🎯 Resumo Rápido
+
+1. **Ativar ambiente virtual**: `.venv1\Scripts\activate` (Windows)
+2. **Instalar dependências**: `pip install -r requirements.txt`
+3. **Iniciar API**: `uvicorn main:app --reload --host 0.0.0.0 --port 8000`
+4. **Acessar**: http://localhost:8000/docs
+5. **Testar**: Use a interface interativa ou faça requisições POST para `/summarize`
