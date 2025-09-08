@@ -1,0 +1,8 @@
+# 1. Ativar ambiente virtual
+.venv1\Scripts\activate
+
+# 2. Iniciar a API
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+
+# 3. Acessar no navegador
+http://localhost:8000/docs
